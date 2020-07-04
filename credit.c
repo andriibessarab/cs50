@@ -26,11 +26,13 @@ int main(void)
         {
             printf("MASTERCARD\n");
         }
+
         //Check if the card is VISA
         else if ((length(card) == 13 || length(card) == 16) && digits(1, card) == 4)
         {
             printf("VISA\n");
         }
+
         else
         {
             printf("INVALID\n");
