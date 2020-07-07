@@ -45,7 +45,7 @@ int main(void)
     //Print out the results
     if (index >= 1 && index <= 16)
     {
-        printf("Grade: %.0f\n", index);
+        printf("Grade %.0f\n", index);
     }
     else if (index < 1)
     {
