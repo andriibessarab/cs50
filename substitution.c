@@ -5,8 +5,6 @@
 
 int main(int argc, string argv[])
 {
-    //Validate key
-
     //Check if user provided key
     if (argc != 2)
     {
@@ -61,7 +59,8 @@ int main(int argc, string argv[])
         }
     }
 
-
     //Print ciphertext
     printf("ciphertext: %s\n", text);
+
+    return 0;
 }
