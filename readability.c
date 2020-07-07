@@ -22,13 +22,13 @@ int main(void)
             letters++;
         }
 
-        //Check if i ends the word(space)
+        //Check if i is a space before a new word
         if (text[i] == 32 && text[i + 1] != 32)
         {
             words++;
         }
 
-        //Check if i ends the sentence(. or ! or ?)
+        //Check if i ends a sentence(. or ! or ?)
         if (text[i] == 46 || text[i] == 33 || text[i] == 63)
         {
             sentences++;
