@@ -134,7 +134,7 @@ void add_pairs(void)
         {
             if (j != i)
             {
-                if (preferences [i] [j] >= preferences [j] [i]) //???
+                if (preferences [i] [j] > preferences [j] [i])
                 {
                     pair_count++;
                     pairs[pair_count - 1].winner = i;
@@ -190,7 +190,7 @@ void lock_pairs(void)
             {
                 for (int r = 0; r < pair_count; r++)
                 {
-                    if (locked[r][j])
+                    if (locked [r] [j])
                     {
                         a++;
                         break;
@@ -212,7 +212,7 @@ void print_winner(void)
     {
         for (int i = 0; i < pair_count; i++)
         {
-            if (locked[i][j])
+            if (locked [i] [j])
             {
                 break;
             }
