@@ -32,6 +32,7 @@ void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
+
 void print_winner(void);
 
 int main(int argc, string argv[])
@@ -133,7 +134,7 @@ void add_pairs(void)
         {
             if (j != i)
             {
-                if (preferences [i] [j] > preferences [j] [i])
+                if (preferences [i] [j] >= preferences [j] [i]) //???
                 {
                     pair_count++;
                     pairs[pair_count - 1].winner = i;
@@ -169,28 +170,37 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
-        if (i == pair_count - 1)
+        int l = true;
+        for (int j = 0; j < pair_count; j++)
         {
-            int l = 0;
+            if (locked[i][j])
+            {
+                l = false;
+                break;
+            }
+        }
+        if (l)
+        {
+            locked [pairs[i].winner] [pairs[i].loser] = true;
+        }
+        else if (i == pair_count - 1)
+        {
+            int a = 0;
             for (int j = 0; j < pair_count; j++)
             {
                 for (int r = 0; r < pair_count; r++)
                 {
                     if (locked[r][j])
                     {
-                        l++;
+                        a++;
                         break;
                     }
                 }
             }
-            if (l < pair_count - 1)
+            if (pair_count - a >= 2)
             {
-                locked[pairs[i].winner] [pairs[i].loser] = true;
+                locked [pairs[i].winner] [pairs[i].loser] = true;
             }
-        }
-        else
-        {
-            locked[pairs[i].winner] [pairs[i].loser] = true;
         }
     }
 }
