@@ -32,7 +32,7 @@ void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
-
+bool is_cycle(int w, int l);
 void print_winner(void);
 
 int main(int argc, string argv[])
@@ -168,39 +168,47 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
+    int used_candidates[candidate_count];
+    int used_cadidates_count = 0;
     for (int i = 0; i < pair_count; i++)
     {
-        int a = 0;
-        for (int j = 0; j < pair_count; j++)
-        {
-            for (int r = 0; r < pair_count; r++)
-            {
-                if (locked [r] [j])
-                {
-                    a++;
-                    break;
-                }
-            }
-        }
-        if (pair_count - a >= 2)
+        if (!(is_cycle(pairs[i].winner, pairs[i].loser)))
         {
             locked [pairs[i].winner] [pairs[i].loser] = true;
         }
     }
+    
+}
+
+//Check if cycle will be created after locking the next pair
+bool is_cycle(int w, int l)
+{
+    if (locked [w] [l])
+    {
+        return true;
+    }
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (locked [i] [w])
+        {
+            return is_cycle(i, w);
+        }
+    }
+    return false;
 }
 
 // Print the winner of the election
 void print_winner(void)
 {
-    for (int j = 0; j < pair_count; j++)
+    for (int j = 0; j < candidate_count; j++)
     {
-        for (int i = 0; i < pair_count; i++)
+        for (int i = 0; i < candidate_count; i++)
         {
             if (locked [i] [j])
             {
                 break;
             }
-            else if (i == pair_count - 1)
+            else if (i == candidate_count - 1)
             {
                 printf("%s\n", candidates[j]);
                 break;
