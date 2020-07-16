@@ -95,6 +95,22 @@ int main(int argc, string argv[])
     add_pairs();
     sort_pairs();
     lock_pairs();
+    
+    for (int j = 0; j < pair_count; j++)
+    {
+        printf("%i - %i\n", pairs[j].winner, pairs[j].loser);
+    }
+    
+    for (int j = 0; j < candidate_count; j++)
+    {
+        printf("|");
+        for (int i = 0; i < candidate_count; i++)
+        {
+            printf("%i|", locked[j][i]);
+        }
+        printf("\n");
+    }
+    
     print_winner();
     return 0;
 }
@@ -170,17 +186,9 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
-        if (!(is_cycle(pairs[i].winner, pairs[i].loser))
-            && ((pairs[i].winner == 0 && pairs[i].loser == candidate_count - 1)
-                || (pairs[i].loser == 0 && pairs[i].winner == candidate_count - 1)
-                || (pairs[i].winner == 0 && pairs[i].loser == 1)
-                || (pairs[i].loser == 0 && pairs[i].winner == 1)
-                || (pairs[i].winner == 0 && pairs[i].loser == 1)
-                || pairs[i].winner - pairs[i].loser == 1 
-                || pairs[i].loser - pairs[i].winner == 1
-                || pairs[i].winner - pairs[i].loser == -1 
-                || pairs[i].loser - pairs[i].winner == -1))
+        if (!(is_cycle(pairs[i].winner, pairs[i].loser)))
         {
+            printf("-->%i - %i\n", pairs[i].winner, pairs[i].loser);
             locked [pairs[i].winner] [pairs[i].loser] = true;
         }
     }
@@ -190,6 +198,7 @@ void lock_pairs(void)
 //Check if cycle will be created after locking the next pair
 bool is_cycle(int w, int l)
 {
+    printf("cyc\n");
     if (locked [l] [w])
     {
         return true;
