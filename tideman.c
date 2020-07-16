@@ -198,7 +198,7 @@ bool is_cycle(int w, int l)
     {
         if (locked [i] [w])
         {
-            return true;
+            return is_cycle(i, l);
         }
     }
     return false;
