@@ -171,13 +171,15 @@ void lock_pairs(void)
     for (int i = 0; i < pair_count; i++)
     {
         if (!(is_cycle(pairs[i].winner, pairs[i].loser))
-        && ((pairs[i].winner == 0 && pairs[i].loser == candidate_count - 1)
-            || (pairs[i].loser == 0 && pairs[i].winner == candidate_count - 1)
-            || (pairs[i].winner == 0 && pairs[i].loser == 1)
-            || (pairs[i].loser == 0 && pairs[i].winner == 1)
-            || (pairs[i].winner == 0 && pairs[i].loser == 1)
-            || pairs[i].winner - pairs[i].loser == 1 
-            || pairs[i].loser - pairs[i].winner == 1))
+            && ((pairs[i].winner == 0 && pairs[i].loser == candidate_count - 1)
+                || (pairs[i].loser == 0 && pairs[i].winner == candidate_count - 1)
+                || (pairs[i].winner == 0 && pairs[i].loser == 1)
+                || (pairs[i].loser == 0 && pairs[i].winner == 1)
+                || (pairs[i].winner == 0 && pairs[i].loser == 1)
+                || pairs[i].winner - pairs[i].loser == 1 
+                || pairs[i].loser - pairs[i].winner == 1
+                || pairs[i].winner - pairs[i].loser == -1 
+                || pairs[i].loser - pairs[i].winner == -1))
         {
             locked [pairs[i].winner] [pairs[i].loser] = true;
         }
@@ -188,7 +190,7 @@ void lock_pairs(void)
 //Check if cycle will be created after locking the next pair
 bool is_cycle(int w, int l)
 {
-    if (locked [w] [l])
+    if (locked [l] [w])
     {
         return true;
     }
@@ -196,7 +198,7 @@ bool is_cycle(int w, int l)
     {
         if (locked [i] [w])
         {
-            return is_cycle(i, w);
+            return true;
         }
     }
     return false;
