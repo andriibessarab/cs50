@@ -72,27 +72,27 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             if (!(i == 0 || j == 0))
             {
                 l++;
-                avgR += image[i - 1][j - 1].rgbtRed;
-                avgG += image[i - 1][j - 1].rgbtGreen;
-                avgB += image[i - 1][j - 1].rgbtBlue;
+                avgR += image_copy[i - 1][j - 1].rgbtRed;
+                avgG += image_copy[i - 1][j - 1].rgbtGreen;
+                avgB += image_copy[i - 1][j - 1].rgbtBlue;
             }
              
             // 2
             if (!(i == 0))
             {
                 l++;
-                avgR += image[i - 1][j].rgbtRed;
-                avgG += image[i - 1][j].rgbtGreen;
-                avgB += image[i - 1][j].rgbtBlue;
+                avgR += image_copy[i - 1][j].rgbtRed;
+                avgG += image_copy[i - 1][j].rgbtGreen;
+                avgB += image_copy[i - 1][j].rgbtBlue;
             }
             
             // 3
             if (!(i == 0 || j == width - 1))
             {
                 l++;
-                avgR += image[i - 1][j + 1].rgbtRed;
-                avgG += image[i - 1][j + 1].rgbtGreen;
-                avgB += image[i - 1][j + 1].rgbtBlue;
+                avgR += image_copy[i - 1][j + 1].rgbtRed;
+                avgG += image_copy[i - 1][j + 1].rgbtGreen;
+                avgB += image_copy[i - 1][j + 1].rgbtBlue;
             }
             
             
@@ -100,45 +100,45 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             if (!(j == 0))
             {
                 l++;
-                avgR += image[i][j - 1].rgbtRed;
-                avgG += image[i][j - 1].rgbtGreen;
-                avgB += image[i][j - 1].rgbtBlue;
+                avgR += image_copy[i][j - 1].rgbtRed;
+                avgG += image_copy[i][j - 1].rgbtGreen;
+                avgB += image_copy[i][j - 1].rgbtBlue;
             }
             
             // 5
             if (!(j == width - 1))
             {
                 l++;
-                avgR += image[i][j + 1].rgbtRed;
-                avgG += image[i][j + 1].rgbtGreen;
-                avgB += image[i][j + 1].rgbtBlue;
+                avgR += image_copy[i][j + 1].rgbtRed;
+                avgG += image_copy[i][j + 1].rgbtGreen;
+                avgB += image_copy[i][j + 1].rgbtBlue;
             }
             
             // 6
             if (!(i == height - 1 || j == 0))
             {
                 l++;
-                avgR += image[i + 1][j - 1].rgbtRed;
-                avgG += image[i + 1][j - 1].rgbtGreen;
-                avgB += image[i + 1][j - 1].rgbtBlue;
+                avgR += image_copy[i + 1][j - 1].rgbtRed;
+                avgG += image_copy[i + 1][j - 1].rgbtGreen;
+                avgB += image_copy[i + 1][j - 1].rgbtBlue;
             }
             
             // 7
             if (!(i == height - 1))
             {
                 l++;
-                avgR += image[i + 1][j].rgbtRed;
-                avgG += image[i + 1][j].rgbtGreen;
-                avgB += image[i + 1][j].rgbtBlue;
+                avgR += image_copy[i + 1][j].rgbtRed;
+                avgG += image_copy[i + 1][j].rgbtGreen;
+                avgB += image_copy[i + 1][j].rgbtBlue;
             }
             
             // 8
             if (!(i == height - 1 || j == width - 1))
             {
                 l++;
-                avgR += image[i + 1][j + 1].rgbtRed;
-                avgG += image[i + 1][j + 1].rgbtGreen;
-                avgB += image[i + 1][j + 1].rgbtBlue;
+                avgR += image_copy[i + 1][j + 1].rgbtRed;
+                avgG += image_copy[i + 1][j + 1].rgbtGreen;
+                avgB += image_copy[i + 1][j + 1].rgbtBlue;
             }
 
             // Set R, G, B values to the pixel
