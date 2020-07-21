@@ -8,7 +8,7 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            // Get the avg of R, G, B
+            // Get avg of R, G, B
             int avg = round((image[i][j].rgbtRed + image[i][j].rgbtGreen + image[i][j].rgbtBlue) / 3.0);
 
             // Set all values equal to avg
@@ -29,7 +29,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
             // Remember value of image[i][j]
             RGBTRIPLE a = image[i][j];
 
-            // Switch px's in the right part and in the left part of the row
+            // Switch px's in right part and inleft part of row
             image[i][j] = image[i][width - (j + 1)];
             image[i][width - (j + 1)] = a;
         }
@@ -39,7 +39,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
-    //Make a copy of an image
+    // Make copy of img
     RGBTRIPLE image_copy[height][width];
 
     for (int i = 0; i < height; i++)
@@ -54,7 +54,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            // Delcare var's for avg values of R, G, B, and elements count
+            // Delcare var's for avg values of R, G, B, and elements counter
             int l = 0;
             int avgR = 0;
             int avgG = 0;
@@ -150,10 +150,10 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 }
             }
 
-            // Set R, G, B values to the pixel
-            image[i][j].rgbtRed = round(avgR / l);
-            image[i][j].rgbtGreen = round(avgG / l);
-            image[i][j].rgbtBlue = round(avgB / l);
+            // Set R, G, B of curr. px
+            image[i][j].rgbtRed = round((float) avgR / l);
+            image[i][j].rgbtGreen = round((float) avgG / l);
+            image[i][j].rgbtBlue = round((float) avgB / l);
         }
     }
 }
@@ -161,7 +161,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
-    //Make a copy of an image
+    //Make copy of img
     RGBTRIPLE image_copy[height][width];
 
     for (int i = 0; i < height; i++)
@@ -181,7 +181,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
             int valG[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
             int valB[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
-            // Find out the avg values of R, G, B
+            // Get values of 8 px around curr. px
 
             /**
              * 00  01  02
@@ -189,7 +189,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
              * 20  21  22
              */
 
-            // 11(curr. element)
+            // 11(curr element)
             valR[1][1] = image_copy[i][j].rgbtRed;
             valG[1][1] = image_copy[i][j].rgbtGreen;
             valB[1][1] = image_copy[i][j].rgbtBlue;
@@ -262,37 +262,37 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 }
             }
 
-            // Find Gx and Gy for R, G, B
+            // Calculate Gx and Gy for R, G, B
             int GxR = (valR[0][0] * -1) + (valR[0][1] * 0) + (valR[0][2] * 1)
-                    + (valR[1][0] * -2) + (valR[1][1] * 0) + (valR[1][2] * 2)
-                    + (valR[2][0] * -1) + (valR[2][1] * 0) + (valR[2][2] * 1);
+                      + (valR[1][0] * -2) + (valR[1][1] * 0) + (valR[1][2] * 2)
+                      + (valR[2][0] * -1) + (valR[2][1] * 0) + (valR[2][2] * 1);
 
             int GxG = (valG[0][0] * -1) + (valG[0][1] * 0) + (valG[0][2] * 1)
-                    + (valG[1][0] * -2) + (valG[1][1] * 0) + (valG[1][2] * 2)
-                    + (valG[2][0] * -1) + (valG[2][1] * 0) + (valG[2][2] * 1);
+                      + (valG[1][0] * -2) + (valG[1][1] * 0) + (valG[1][2] * 2)
+                      + (valG[2][0] * -1) + (valG[2][1] * 0) + (valG[2][2] * 1);
 
             int GxB = (valB[0][0] * -1) + (valB[0][1] * 0) + (valB[0][2] * 1)
-                    + (valB[1][0] * -2) + (valB[1][1] * 0) + (valB[1][2] * 2)
-                    + (valB[2][0] * -1) + (valB[2][1] * 0) + (valB[2][2] * 1);
+                      + (valB[1][0] * -2) + (valB[1][1] * 0) + (valB[1][2] * 2)
+                      + (valB[2][0] * -1) + (valB[2][1] * 0) + (valB[2][2] * 1);
 
             int GyR = (valR[0][0] * -1) + (valR[0][1] * -2) + (valR[0][2] * -1)
-                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[1][2] *  0)
-                    + (valR[2][0] *  1) + (valR[2][1] *  2) + (valR[2][2] *  1);
+                      + (valR[1][0] * 0) + (valR[1][1] * 0) + (valR[1][2] * 0)
+                      + (valR[2][0] * 1) + (valR[2][1] * 2) + (valR[2][2] * 1);
 
             int GyG = (valG[0][0] * -1) + (valG[0][1] * -2) + (valG[0][2] * -1)
-                    + (valG[1][0] *  0) + (valG[1][1] *  0) + (valG[1][2] *  0)
-                    + (valG[2][0] *  1) + (valG[2][1] *  2) + (valG[2][2] *  1);
+                      + (valG[1][0] * 0) + (valG[1][1] * 0) + (valG[1][2] * 0)
+                      + (valG[2][0] * 1) + (valG[2][1] * 2) + (valG[2][2] * 1);
 
             int GyB = (valB[0][0] * -1) + (valB[0][1] * -2) + (valB[0][2] * -1)
-                    + (valB[1][0] *  0) + (valB[1][1] *  0) + (valB[1][2] *  0)
-                    + (valB[2][0] *  1) + (valB[2][1] *  2) + (valB[2][2] *  1);
+                      + (valB[1][0] *  0) + (valB[1][1] * 0) + (valB[1][2] * 0)
+                      + (valB[2][0] *  1) + (valB[2][1] * 2) + (valB[2][2] * 1);
 
-            // Get values of R, G B
+            // Calculate values of R, G, B
             int red = round(sqrt(pow(GxR, 2) + pow(GyR, 2)));
             int green = round(sqrt(pow(GxG, 2) + pow(GyG, 2)));
             int blue = round(sqrt(pow(GxB, 2) + pow(GyB, 2)));
 
-            // Set value of R
+            // Set R of curr px
             if (red > 255)
             {
                 image[i][j].rgbtRed = 255;
@@ -302,7 +302,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 image[i][j].rgbtRed = red;
             }
 
-            // Set value of G
+            // Set G of curr px
             if (green > 255)
             {
                 image[i][j].rgbtGreen = 255;
@@ -312,7 +312,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 image[i][j].rgbtGreen = green;
             }
 
-            // Set value of B
+            // Set B of curr px
             if (blue > 255)
             {
                 image[i][j].rgbtBlue = 255;
