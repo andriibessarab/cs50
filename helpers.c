@@ -279,9 +279,9 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                     + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[1][2] *  0)
                     + (valR[2][0] *  1) + (valR[2][1] *  2) + (valR[2][2] *  1);
 
-            int GyG = (valR[0][0] * -1) + (valR[0][1] * -2) + (valR[0][2] * -1)
-                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[1][2] *  0)
-                    + (valR[2][0] *  1) + (valR[2][1] *  2) + (valR[2][2] *  1);
+            int GyG = (valG[0][0] * -1) + (valG[0][1] * -2) + (valG[0][2] * -1)
+                    + (valG[1][0] *  0) + (valG[1][1] *  0) + (valG[1][2] *  0)
+                    + (valG[2][0] *  1) + (valG[2][1] *  2) + (valG[2][2] *  1);
 
             int GyB = (valB[0][0] * -1) + (valB[0][1] * -2) + (valB[0][2] * -1)
                     + (valB[1][0] *  0) + (valB[1][1] *  0) + (valB[1][2] *  0)
