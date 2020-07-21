@@ -288,7 +288,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                     + (valB[2][0] *  1) + (valB[2][1] *  2) + (valB[2][2] *  1);
 
             // Get values of R, G B
-            int red = round(sqrt(pow(GxG, 2) + pow(GyG, 2)));
+            int red = round(sqrt(pow(GxR, 2) + pow(GyR, 2)));
             int green = round(sqrt(pow(GxG, 2) + pow(GyG, 2)));
             int blue = round(sqrt(pow(GxB, 2) + pow(GyB, 2)));
 
