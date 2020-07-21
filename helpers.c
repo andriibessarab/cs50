@@ -288,18 +288,14 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                     + (valB[2][0] *  1) + (valB[2][1] *  2) + (valB[2][2] *  1);
 
             // Get values of R, G B
-            int red = sqrt(pow(GxG, 2) + pow(GyG, 2));
-            int green = sqrt(pow(GxG, 2) + pow(GyG, 2));
-            int blue = sqrt(pow(GxB, 2) + pow(GyB, 2));
+            int red = round(sqrt(pow(GxG, 2) + pow(GyG, 2)));
+            int green = round(sqrt(pow(GxG, 2) + pow(GyG, 2)));
+            int blue = round(sqrt(pow(GxB, 2) + pow(GyB, 2)));
 
             // Set value of R
             if (red > 255)
             {
                 image[i][j].rgbtRed = 255;
-            }
-            else if (red < 0)
-            {
-                image[i][j].rgbtRed = 0;
             }
             else
             {
@@ -311,10 +307,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
             {
                 image[i][j].rgbtGreen = 255;
             }
-            else if (green < 0)
-            {
-                image[i][j].rgbtGreen = 0;
-            }
             else
             {
                 image[i][j].rgbtGreen = green;
@@ -324,10 +316,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
             if (blue > 255)
             {
                 image[i][j].rgbtBlue = 255;
-            }
-            else if (blue < 0)
-            {
-                image[i][j].rgbtBlue = 0;
             }
             else
             {
