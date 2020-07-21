@@ -210,7 +210,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 valG[0][1] = image_copy[i - 1][j].rgbtGreen;
                 valB[0][1] = image_copy[i - 1][j].rgbtBlue;
 
-                // 2
+                // 02
                 if (j != width - 1)
                 {
                     valR[0][2] = image_copy[i - 1][j + 1].rgbtRed;
@@ -264,27 +264,27 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
 
             // Find Gx and Gy for R, G, B
             int GxR = (valR[0][0] * -1) + (valR[0][1] * 0) + (valR[0][2] * 1)
-                    + (valR[1][0] * -2) + (valR[1][1] * 0) + (valR[0][2] * 2)
+                    + (valR[1][0] * -2) + (valR[1][1] * 0) + (valR[1][2] * 2)
                     + (valR[2][0] * -1) + (valR[2][1] * 0) + (valR[2][2] * 1);
 
             int GxG = (valG[0][0] * -1) + (valG[0][1] * 0) + (valG[0][2] * 1)
-                    + (valG[1][0] * -2) + (valG[1][1] * 0) + (valG[0][2] * 2)
+                    + (valG[1][0] * -2) + (valG[1][1] * 0) + (valG[1][2] * 2)
                     + (valG[2][0] * -1) + (valG[2][1] * 0) + (valG[2][2] * 1);
 
             int GxB = (valB[0][0] * -1) + (valB[0][1] * 0) + (valB[0][2] * 1)
-                    + (valB[1][0] * -2) + (valB[1][1] * 0) + (valB[0][2] * 2)
-                    +(valB[2][0] * -1) + (valB[2][1] * 0) + (valB[2][2] * 1);
+                    + (valB[1][0] * -2) + (valB[1][1] * 0) + (valB[1][2] * 2)
+                    + (valB[2][0] * -1) + (valB[2][1] * 0) + (valB[2][2] * 1);
 
             int GyR = (valR[0][0] * -1) + (valR[0][1] * -2) + (valR[0][2] * -1)
-                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[0][2] *  0)
+                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[1][2] *  0)
                     + (valR[2][0] *  1) + (valR[2][1] *  2) + (valR[2][2] *  1);
 
             int GyG = (valR[0][0] * -1) + (valR[0][1] * -2) + (valR[0][2] * -1)
-                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[0][2] *  0)
+                    + (valR[1][0] *  0) + (valR[1][1] *  0) + (valR[1][2] *  0)
                     + (valR[2][0] *  1) + (valR[2][1] *  2) + (valR[2][2] *  1);
 
             int GyB = (valB[0][0] * -1) + (valB[0][1] * -2) + (valB[0][2] * -1)
-                    + (valB[1][0] *  0) + (valB[1][1] *  0) + (valB[0][2] *  0)
+                    + (valB[1][0] *  0) + (valB[1][1] *  0) + (valB[1][2] *  0)
                     + (valB[2][0] *  1) + (valB[2][1] *  2) + (valB[2][2] *  1);
 
             // Get values of R, G B
