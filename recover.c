@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         // Check if curr chunk is beginning of img
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
-            // If it's not a first img, then close prev img
+            // Check if at least one img was detected before, then close prev img
             if (img_counter != 0)
             {
                 fclose(img);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            // If method = write, then append curr chunk to img
+            // Check if at least one img was detected before, then append curr chunk to img
             if (img_counter != 0)
             {
                 fwrite(&buffer, sizeof(char), sizeof(buffer), img);
