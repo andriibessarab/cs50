@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void read_chunk(FILE *card, char method, FILE *img);
-int i = 0;
-
 int main(int argc, char *argv[])
 {
     // Check if user provided name of memory card
@@ -22,61 +19,39 @@ int main(int argc, char *argv[])
         printf("Could not open %s\n", argv[1]);
         return 1;
     }
-
-    // Start reading a card by chunks
-    read_chunk(card, 'f', NULL);
-}
-
-void read_chunk(FILE *card, char method, FILE *img)
-{
-    // Creat a buffer to store information
-    unsigned char buffer[512];
     
-    // Check if didn't reach the end of file
-    if (fread(buffer, sizeof(char), sizeof(buffer), card) != sizeof(buffer))
+    // Declare neccessary variables
+    unsigned char buffer[512];
+    int img_counter = 0;
+    char img_name[8];
+    FILE *img;
+
+    // Recover images
+    while (fread(buffer, sizeof(char), sizeof(buffer), card) == sizeof(buffer))
     {
-        if (img != NULL)
-        {
-            fclose(img);
-        }
-        fclose(card);
-        return;
-    }
-    else
-    {
+
         // Check if curr chunk is beginning of img
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
-            // If method = write, then close prev img and set method to find
-            if (method == 'w')
+            // If it's not a first img, then close prev img
+            if (img_counter != 0)
             {
                 fclose(img);
-                method = 'f';
             }
-            // If method = find, then start a new image
-            if (method == 'f')
-            {
-                char img_name[8];
-                sprintf(img_name, "%03i.jpeg", i);
-                i++;
-                FILE *new_img = fopen(img_name, "a");
-                fwrite(buffer, sizeof(char), sizeof(buffer), new_img);
-                read_chunk(card, 'w', new_img);
-                return;
-            }
+
+            // Create a new img
+            sprintf(img_name, "%03i.jpg", img_counter);
+            img_counter++;
+            img = fopen(img_name, "a");
+            fwrite(&buffer, sizeof(char), sizeof(buffer), img);
         }
         else
         {
             // If method = write, then append curr chunk to img
-            if (method = 'w')
+            if (img_counter != 0)
             {
-                fwrite(buffer, sizeof(char), sizeof(buffer), img);
-                read_chunk(card, 'w', img);
-                return;
+                fwrite(&buffer, sizeof(char), sizeof(buffer), img);
             }
-
-            // Else keep looking for img
-            read_chunk(card, 'f', NULL);  
         }
     }
 }
