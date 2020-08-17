@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <!-- CSS -->
+  <link href="styles.css" rel="stylesheet">
+
+  <!-- Title -->
+  <title>Projects|Andrii Bessarab</title>
+
+  <!-- Icon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <span class="navbar-brand">Projects</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">About Me</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="skills.html">Skills</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="projects.html">Projects <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="gallery.html">Gallery</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- CS50 Projects -->
+  <h1 class="px-2 my-4">CS50 Projects(distribution code)</h1>
+
+  <p class="px-2 my-4">
+    Below you can see all my projects for "CS50's Web Programming with Python and JavaScript" and "CS50's Introduction to Computer Science".
+    Tap on any project to download its distribution code.
+  </p>
+  <div class="list-group">
+    <a href="archives/cs50w_homepage.zip" class="list-group-item list-group-item-action cs50_projects" download>CS50w Homepage</a>
+    <a href="archives/cs50w_books.zip" class="list-group-item list-group-item-action cs50_projects" download>CS50w Books</a>
+    <a href="archives/cs50w_flack.zip" class="list-group-item list-group-item-action cs50_projects" download>CS50w Flack</a>
+    <a href="archives/cs50w_pizza.zip" class="list-group-item list-group-item-action cs50_projects" download>CS50w Pizza</a>
+    <a href="archives/cs50w_final_spend.zip" class="list-group-item list-group-item-action cs50_projects" download>CS50w Final(Spend)</a>
+    <a class="list-group-item list-group-item-action cs50_projects disabled" tabindex="-1" aria-disabled="true">CS50x Homepage</a>
+    <a class="list-group-item list-group-item-action cs50_projects disabled" tabindex="-1" aria-disabled="true">CS50x Finance</a>
+    <a class="list-group-item list-group-item-action cs50_projects disabled" tabindex="-1" aria-disabled="true">CS50W Final(PyPI World)</a>
+  </div>
+
+  <!-- Other Websites -->
+  <h1 class="px-2 my-4">Other Websites(links)</h1>
+
+  <p class="px-2 my-4">Links to my real-world website.</p>
+  <div class="list-group">
+    <a href="http://energoresurs.com.ru" target="_blank" class="list-group-item list-group-item-action">Energoresurs LLC</a>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Remember elements
+    var cs50Projects = document.querySelectorAll(".cs50_projects");
+    var cs50Dowload = document.querySelector("#cs50_dowload");
+
+    // Color selected button
+    cs50Projects.forEach(el => {
+      el.onclick = el => {
+        cs50Projects.forEach(el => {
+          el.classList.remove("active");
+        });
+        el["explicitOriginalTarget"].classList.add("active");
+      };
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

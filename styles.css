@@ -1,0 +1,86 @@
+/* Universal */
+.note {
+    color: darkgrey;
+    display: block;
+}
+
+.note a {
+    color: gray;
+}
+
+/* index.html & skills.html */
+.social-medias,
+.skills {
+    max-width: 20vw;
+}
+
+/* index.html */
+.facts {
+    font-size: 1.5rem;
+    line-height: 2.5;
+    max-width: 40vw;
+}
+
+.facts img {
+    max-width: 15vw;
+}
+
+/* gallery.html */
+iframe {
+    width: 40vw;
+    height: 40vh;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+    /* index.html */
+    .facts {
+    max-width: 75vw;
+    }
+
+    /* gallery.html */
+    iframe {
+        width: 60vw;
+    }
+}
+
+@media (max-width: 800px) {
+    /* Universal */
+    html {
+        font-size: 14px;
+    }
+
+    /* index.html */
+    .facts {
+    max-width: 100vw;
+    }
+
+    .facts img {
+        width: 30px;
+        height: auto;
+    }
+
+    .social-medias img {
+        width: 70px;
+        height: auto;
+    }
+
+    /* gallery.html */
+    iframe {
+        width: 90vw;
+    }
+}
+
+@media (max-height: 700px) {
+    /* gallery.html */
+    iframe {
+        height: 60vh;
+    }
+}
+
+@media (max-height: 500px) {
+    /* gallery.html */
+    iframe {
+        height: 80vh;
+    }
+}
