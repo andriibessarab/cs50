@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+
+    <form action="/sell" method="post">
+        <div class="form-group">
+            <select autofocus class="form-control" name="symbol">
+                <option disabled selected value=" ">Symbol</option>
+                {% for i in symbols %}
+                    <option value="{{ i['symbol'] }}">{{ i["symbol"] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input autocomplete="on" min="1" class="form-control" name="shares" placeholder="Shares" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form>
+
+{% endblock %}
