@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <!--Title-->
+    <title>{% block title %}{% endblock %} | Spend</title>
+
+    <!--Meta-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Icon-->
+    <link rel="icon" href="../../static/spend/img/favicon.ico">
+    
+    <!--Google Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Indie+Flower">
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!--Other-->
+    <link rel="stylesheet" href="../../static/spend/css/style.css">
+
+    <!--Additional-->
+    {% block additional_css %}
+
+    {% endblock %}
+
+</head>
+
+<body class="container-fluid">
+
+    <div class="row">
+
+        <header class="col-12">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+                <a class="navbar-brand" href="/">Spend</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+
+                        {% if user.is_authenticated %}
+
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/">Main</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/history">History</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a class="nav-link" href="" id="addFamilyMember" data-toggle="modal" data-target="#modal">Add Member</a>
+                            </li>
+
+                            <li class="nav-item active">
+                                <a class="nav-link" href="" id="addNewCategory" data-toggle="modal" data-target="#modal">Add Category</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logOut">Log Out</a>
+                            </li>
+
+                        {% else %}
+
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/">Main</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="">History</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="">Add Member</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="">Add Category</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="" id="logIn"  data-toggle="modal" data-target="#modal">Log In</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="" id="register" data-toggle="modal" data-target="#modal">Register</a>
+                            </li>
+
+                        {% endif %}
+
+                    </ul>
+                </div>
+
+            </nav>
+
+        </header>
+
+    </div>
+
+    <main>
+
+        {% block main %}
+        {% endblock %}
+        
+    </main>
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-info">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Bootstrap-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+    <script src="../../static/spend/js/variables.js"></script>
+    <script src="../../static/spend/js/functions.js"></script>
+
+    {% if  user.is_authenticated %}
+
+        <script src="../../static/spend/js/authorized.js"></script>
+
+    {% else %}
+
+        <script src="../../static/spend/js/unauthorized.js"></script>
+
+    {% endif %}
+
+    {% block additional_script %}
+
+    {% endblock %}
+
+</body>
+
+</html>

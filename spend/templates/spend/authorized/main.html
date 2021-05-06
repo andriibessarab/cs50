@@ -1,0 +1,151 @@
+{% extends 'spend/base.html' %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+
+    <!-- Overview -->
+
+    <div class="row">
+
+        <h2 class="col-12">
+            Overview
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-info active">
+                    <input type="radio" name="options" id="overviewThisMonth" autocomplete="off" checked> This Month
+                </label>
+                <label class="btn btn-info">
+                    <input type="radio" name="options" id="overviewLastMonth" autocomplete="off"> Last Month
+                </label>
+            </div>
+        </h2>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-7 mx-auto my-1 col-md-5 col-xl-2 offset-xl-1 card bg-info">
+            <div class="card-body" id="total">
+                <h3 class="card-title">Total</h3>
+                <p></p>
+            </div>
+        </div>
+
+        <div class="col-7 mx-auto my-1 col-md-5 ml-md-auto col-xl-2 offset-xl-2 card bg-danger">
+            <div class="card-body" id="spent">
+                <h3 class="card-title">Spent</h3>
+                <p></p>
+            </div>
+        </div>
+
+        <div class="col-7 mx-auto my-1 col-md-5 mx-md-auto col-xl-2 offset-xl-2 card bg-success">
+            <div class="card-body" id="remaining">
+                <h3 class="card-title">Remaining</h3>
+                <p></p>
+            </div>
+        </div>
+    
+    </div>
+
+    <!-- Progress Bar -->
+
+    <div class="row">
+
+        <h2 class="col-12">How much have you spent?</h2>
+
+    </div>
+
+    <div class="row no-gutters">
+
+        <div class="col-12 progress" style="height: 3vh;">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+    </div>
+
+    <!-- Track -->
+
+    <div class="row">
+
+        <h2 class="col-12">
+            Track
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" name="type" value="+" class="track-input" data-track-input-type="type"> +
+                </label>
+                <label class="btn btn-danger">
+                    <input type="radio" name="type" value="-" class="track-input" data-track-input-type="type"> -
+                </label>
+            </div>
+        </h2>
+
+    </div>
+
+    <div class="row">
+
+        <form class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto" id="track-form" onsubmit="return false;">
+
+            <div class="form-row my-3">
+
+                <div class="col">
+
+                    <select class="form-control track-input" id="track-user" data-track-input-type="user">
+                        <option value="">Select User</option>
+                    </select>
+
+                </div>
+
+                <div class="col">
+
+                    <select class="form-control track-input" id="track-category" data-track-input-type="category">
+                        <option value="">Select Category</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="form-row my-3">
+
+                <div class="col">
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">$</div>
+                        </div>
+                        <input class="form-control track-input" type="text" placeholder="Amount" data-track-input-type="amount">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-row my-3">
+
+                <div class="col text-center">
+
+                    <button type="submit" class="btn btn-outline-warning">Track</button>
+                    <small class="text-muted" data-error-for-track></small>
+
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block additional_css %}
+
+    <link rel="stylesheet" href="../../static/spend/css/main.css">
+
+{% endblock %}
+
+{% block additional_script %}
+
+    <script src="../../static/spend/js/main.js"></script>
+
+{% endblock %}
