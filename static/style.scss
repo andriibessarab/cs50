@@ -1,0 +1,222 @@
+// UNIVERSAL
+body {
+    margin: 0;
+    overflow: hidden;
+
+    * {
+        font-family: Georgia, "Times New Roman", Times, serif;
+    }
+
+    .bold {
+        font-weight: 700;
+    }
+}
+
+// HEADER
+header {
+    height: 10vh;
+    display: flex !important;
+    align-items: center;
+
+    #title_container {
+        display: inline-flex;
+        align-items: center;
+
+        h1 {
+            margin: 0;
+            font-size: 2.75em;
+        }
+    }
+
+    #change_color_container {
+        display: inline-flex;
+        align-items: center;
+
+        #blue,
+        #green,
+        #orange {
+            margin: 0.5vw;
+            height: 2vw;
+            width: 2vw;
+        }
+
+        #blue {
+            background-color: rgb(0, 172, 230);
+        }
+
+        #green {
+            background-color: rgb(0, 204, 0);
+        }
+
+        #orange {
+            background-color: rgb(255, 153, 0);
+        }
+    }
+
+    #display_username_container {
+        display: inline-flex;
+        align-items: center;
+        text-align: center;
+
+        #display_username {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+    }
+
+    #logout_container {
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+// UNAUTHORIZED
+#unauthorized {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #set_name {
+        text-align: center;
+        padding: 2vh;
+        border-radius: 5%;
+        height: 60vh;
+        width: 60vh;
+
+        h2 {
+            margin-top: 0;
+            font-size: 2.5rem;
+        }
+
+        input {
+            width: 90%;
+            height: 7%;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        button {
+            width: 20%;
+            height: 10%;
+            font-size: 1.2rem;
+            margin: 2vh auto;
+        }
+
+        p {
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+// AUTHORIZED
+#authorized {
+    #all_channels_section {
+        text-align: center;
+        padding: 0;
+        height: 90vh;
+        overflow-y: auto;
+
+        p {
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            line-height: 2;
+            margin: 1vh 0;
+        }
+    }
+
+    #current_channel_section {
+        height: 90vh;
+
+        #current_channel_name {
+            height: 5vh;
+        }
+
+        #channel_content {
+            overflow-y: auto;
+            height: 80vh;
+
+            h2 {
+                font-size: 3rem;
+                margin: 0.75rem 0 1.25rem;
+            }
+            
+            .message_container {
+
+                p {
+                    border: 2px solid;
+                    display: inline-block;
+                    padding: 2%;
+                    width: 50%;
+
+                    .image {
+                        margin: 3% 0;
+                        max-width: 90%;
+                        height: auto;
+                        max-height: 60vh;
+                    }
+
+                    .time_mark {
+                        text-align: end;
+                        color: gray;
+                    }
+                }
+            }
+        }
+
+        #add_message {
+            height: 10vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            #message_input {
+                width: 45%;
+                margin: 0 4% 0 10%;
+            }
+
+            #file_input {
+                display: inline-flex;
+                width: 29%;
+            }
+
+            #add_message_button {
+                width: 15%;
+                margin: 0 10% 0 2%;;
+            }
+        }
+    }
+}
+
+//MEDIA QUERIES
+@media screen and (max-width: 960px) {
+    html {
+        font-size: 12px;
+    }
+
+    .message_container {
+        display: flex;
+        justify-content: center;
+
+        p {
+            width: 80% !important;
+        }
+    }
+
+    #log_out {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .message_container {
+
+        p {
+            width: 100% !important;
+        }
+    }
+}
