@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CS50</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function open_channel(channel) {
+            const request = new XMLHttpRequest();
+            request.open('POST', '/get_messages');
+            request.onload = () => {
+                const data = JSON.parse(request.responseText);
+                const messages = data['messages'];
+                document.querySelector('#channel_content').innerHTML = '';
+                const channel_name = document.createElement('h2');
+                channel_name.innerHTML = channel;
+                document.querySelector('#channel_content').appendChild(channel_name)
+                if (messages.length === 0) {
+                    note = document.createElement('p');
+                    note.innerHTML = 'No messages yet!';
+                    document.querySelector('#channel_content').appendChild(note);
+                    return;
+                }
+                for (message in messages) {
+                    if (messages[message][0] === '11') {
+                        const text = messages[message][1];
+                        const image = messages[message][2];
+                        const author = messages[message][3];
+                        const date = messages[message][4];
+                        const time = messages[message][5];
+                        const message_container = document.createElement('div');
+                        message_container.setAttribute('class', 'message_container');
+                        const message_p = document.createElement('p');
+                        message_p.innerHTML = `<span class="bold">${author}</span><br>${text}<br><img class="image" src="./static/files/${image}"><br><span class="time_mark">${date} ${time}</span>`;
+                        message_container.appendChild(message_p)
+                        document.querySelector('#channel_content').appendChild(message_container);
+                    }
+                    if (messages[message][0] === '10') {
+                        const text = messages[message][1];
+                        const author = messages[message][2];
+                        const date = messages[message][3];
+                        const time = messages[message][4];
+                        console.log(text, author, date, time)
+                        const message_container = document.createElement('div');
+                        message_container.setAttribute('class', 'message_container');
+                        const message_p = document.createElement('p');
+                        message_p.innerHTML = `<span class="bold">${author}</span><br>${text}<br><span class="time_mark">${date} ${time}</span>`;
+                        message_container.appendChild(message_p);
+                        document.querySelector('#channel_content').appendChild(message_container);
+                    }
+                    if (messages[message][0] === '01') {
+                        const image = messages[message][1];
+                        const author = messages[message][2];
+                        const date = messages[message][3];
+                        const time = messages[message][4];
+                        console.log(image, author, date, time)
+                        const message_container = document.createElement('div');
+                        message_container.setAttribute('class', 'message_container');
+                        const message_p = document.createElement('p');
+                        message_p.innerHTML = `<span class="bold">${author}</span><br><img class="image" src="./static/files/${image}"><br><span class="time_mark">${date} ${time}</span>`;;
+                        message_container.appendChild(message_p)
+                        document.querySelector('#channel_content').appendChild(message_container);
+                    }
+                }
+            }
+            const info = new FormData();
+            info.append('channel', channel);
+            request.send(info);
+            localStorage.setItem('channel', channel);
+        };
+    </script>
+</head>
+<body>
+    <!--HEADER-->
+    <header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2" id="title_container">
+                    <h1>CS50</h1>
+                </div>
+                <div class="col-2" id="change_color_container">
+                    <button id="blue"></button>
+                    <button id="green"></button>
+                    <button id="orange"></button>
+                </div>
+                <div class="col-4"></div>
+                <div class="col-2" id="display_username_container"></div>
+                <div class="col-2" id="logout_container"></div>
+            </div>
+        </div>
+    </header>
+    <!--UNAUTHORIZED MAIN-->
+    <main id="unauthorized">
+        <form id="set_name" method="POST">
+            <h2>Get In</h2>
+        <input type="text" placeholder="username123" id="username" maxlength="15" pattern="[^$]*$" oninvalid="this.setCustomValidity('form cannot be empty. single quatation mark and dollar sign are restricted!')" oninput="this.setCustomValidity('')" required>
+            <button>Submit</button>
+            <p><span class="bold">Note: </span>You won't be able to use the same username after you log out or delete
+                cookies for this web site.</p>
+        </form>
+    </main>
+    <!--AUTHORIZED MAIN-->
+    <main id="authorized">
+        <div class="container-fluid">
+            <div class="row">
+                <!--ALL CHANNELS SECTION-->
+                <div class="col-4" id="all_channels_section">
+                    <h2>Channels</h2>
+                    <p>Create Channel</p>
+                    <!--CREATE NEW CHANNEL-->
+                    <button id="create_new_channel_open_button">Create new channel</button>
+                    <div id="create_new_channel_div" , method="POST">
+                        <button id="create_new_channel_close_button">X</button>
+                        <form action="create_channel" id="create_new_channel_form" method="POST">
+                            <label for="channel_name">Channel Name:</label>
+                            <input type="text" id="channel_name" maxlength="30" pattern="[^'$]*$" oninvalid="this.setCustomValidity('form cannot be empty. single quatation mark and dollar sign are restricted!')" oninput="this.setCustomValidity('')" required>
+                            <button id="create_new_channel_submit_button">Submit</button>
+                        </form>
+                    </div>
+                    <!--ALL CHANNELS-->
+                    <p>All channels</p>
+                    <div id="all_channels">
+                    </div>
+                </div>
+                <!--CURRRENT CHANNEL SECTION-->
+                <div class="col-8" id="current_channel_section">
+                    <div id="channel">
+                        <!--CHANNEL CONTENT-->
+                        <div id="channel_content">
+                        </div>
+                        <!--ADD MESSAGE-->
+                        <form id="add_message" , method="POST"><input type="text" id="message_input" pattern="[^'$]*$" oninvalid="this.setCustomValidity('form cannot be empty. single quatation mark and dollar sign are restricted!')" oninput="this.setCustomValidity('')"><input type="file"
+                                id="file_input" accept="image/png, image/jpeg" single><button
+                                id="add_message_button" >Send</button></form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
