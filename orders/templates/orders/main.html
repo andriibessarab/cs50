@@ -1,0 +1,707 @@
+{% extends "orders/layout.html" %}
+
+{% block js %}
+
+<script>
+    //ERROR MESSAGE
+    {% if message %}
+    window.onload = () => {
+        alert('{{ message }}');
+    }
+    {% endif %}
+
+    // OPEN POPUP
+    function openPopup(name, more) {
+        if (name === 'regAddToppings' || name === 'sicAddToppings') {
+            if (name === 'regAddToppings') {
+                localStorage.setItem('pizzaType', 'reg');
+            }
+            if (name === 'sicAddToppings') {
+                localStorage.setItem('pizzaType', 'sic');
+            }
+            document.querySelector('#addToppings').style.display = 'inline-block';
+            return;
+        }
+        if (name === 'subPopup') {
+            getSub(more);
+        }
+        if (name === 'cart') {
+            getCart('contentOfCart');
+        }
+        if (name === 'review') {
+            getCart('reviewContent');
+        }
+        closePopups();
+        document.querySelector(`#${name}`).style.display = 'inline-block';
+    }
+
+    //CLOSE POPUP
+    function closePopups() {
+        const allPopups = document.querySelectorAll('.popup');
+        allPopups.forEach(element => {
+            element.style.display = 'none';
+        });
+        const text = document.querySelectorAll('input[type = "text"]')
+        text.forEach(element => {
+            element.value = '';
+        });
+        const password = document.querySelectorAll('input[type = "password"]')
+        password.forEach(element => {
+            element.value = '';
+        });
+        const email = document.querySelectorAll('input[type = "email"]')
+        email.forEach(element => {
+            element.value = '';
+        });
+        const radio = document.querySelectorAll('input[type = "radio"]')
+        radio.forEach(element => {
+            element.checked = false;
+        });
+        const checkbox = document.querySelectorAll('input[type = "checkbox"]')
+        checkbox.forEach(element => {
+            element.checked = false;
+        });
+        const toppings = document.getElementsByName('toppings')
+        toppings.forEach(element => {
+            element.disabled = true;
+        });
+        const price = document.querySelector('#price')
+        if (price !== null) {
+            price.innerHTML = '';
+        }
+    }
+
+    //CALCULATE PRICE OF PIZZA
+    function calculatePriceOfPizza() {
+        let size;
+        if (document.querySelector('#PizzaSmall:checked') === null && document.querySelector('#PizzaLarge:checked') === null) {
+            allToppings = document.querySelectorAll('.topping');
+            allToppings.forEach(element => {
+                element.disabled = true;
+            });
+        }
+        else {
+            if (document.querySelector('#PizzaSmall:checked') !== null) {
+                let allToppings = document.querySelectorAll('.topping');
+                allToppings.forEach(element => {
+                    element.disabled = false;
+                })
+                size = 'small';
+            }
+            if (document.querySelector('#PizzaLarge:checked') !== null) {
+                let allToppings = document.querySelectorAll('.topping');
+                allToppings.forEach(element => {
+                    element.disabled = false;
+                })
+                size = 'large';
+            }
+        }
+        let allToppings = document.getElementsByName('toppings');
+        let numOfToppingsArray = Array.from(allToppings);
+        let numOfToppings = 0;
+        let numOfToppingsSelected = numOfToppingsArray.some(element => { if (element.checked) { numOfToppings++ } });
+        const pizzaType = localStorage.getItem('pizzaType');
+        const priceString = document.querySelector('#addToppings').getAttribute(`data-prices-${pizzaType}`);
+        prices = priceString.split(', ');
+        if (size === 'small') {
+            switch (numOfToppings) {
+                case 0:
+                    document.querySelector('#price').innerHTML = prices[0];
+                    break;
+                case 1:
+                    document.querySelector('#price').innerHTML = prices[2];
+                    break;
+                case 2:
+                    document.querySelector('#price').innerHTML = prices[4];
+                    break;
+                case 3:
+                    document.querySelector('#price').innerHTML = prices[6];
+                    break;
+                default:
+                    document.querySelector('#price').innerHTML = prices[8];
+                    break;
+            }
+        }
+
+        if (size === 'large') {
+            switch (numOfToppings) {
+                case 0:
+                    document.querySelector('#price').innerHTML = prices[1];
+                    break;
+                case 1:
+                    document.querySelector('#price').innerHTML = prices[3];
+                    break;
+                case 2:
+                    document.querySelector('#price').innerHTML = prices[5];
+                    break;
+                case 3:
+                    document.querySelector('#price').innerHTML = prices[7];
+                    break;
+                default:
+                    document.querySelector('#price').innerHTML = prices[9];
+                    break;
+            }
+        }
+    }
+
+    //GET SUB
+    function getSub(data) {
+        document.querySelector('#submitSub').setAttribute('data', JSON.stringify(data));
+        document.querySelector('#submitSub').innerHTML = '';
+        for (i in data.toppings) {
+            const toppingButton = document.createElement('input');
+            const toppingLabel = document.createElement('label');
+            toppingButton.setAttribute('type', 'checkbox');
+            toppingButton.setAttribute('id', `${i}`);
+            toppingButton.setAttribute('name', 'subTopping');
+            toppingLabel.setAttribute('for', `${i}`);
+            toppingLabel.innerHTML = data.toppings[i];
+            document.querySelector('#submitSub').appendChild(toppingButton);
+            document.querySelector('#submitSub').appendChild(toppingLabel);
+        }
+        const confirm = document.createElement('button');
+        confirm.setAttribute('type', 'submit');
+        confirm.innerHTML = 'Add';
+        document.querySelector('#submitSub').appendChild(confirm);
+        calculatePriceOfSub();
+    }
+
+    //CALCULATE PRICE OF SUB
+    function calculatePriceOfSub() {
+        const allToppings = document.getElementsByName('subTopping');
+        const data = JSON.parse(document.querySelector('#submitSub').getAttribute('data'))
+        let numOfToppings = 0;
+        allToppings.forEach(element => {
+            if (element.checked === true) {
+                numOfToppings++;
+            }
+        })
+        const priceOfToppings = numOfToppings * 0.5;
+        let totalPrice = 0;
+        totalPrice = data.price + priceOfToppings;
+        document.querySelector('#subPrice').innerHTML = totalPrice;
+    }
+
+    // ADD ITEM TO CART
+    function addItemToCart(product, more) {
+        item = {};
+        item.name = item.size = '';
+        item.size = '';
+        item.toppings = '';
+        item.price = '';
+        if (product === 'submitPizza') {
+            if (document.querySelector('#PizzaSmall').checked === true) {
+                item.size = 'S';
+            }
+            if (document.querySelector('#PizzaLarge').checked === true) {
+                item.size = 'L';
+            }
+            let allToppings = document.getElementsByName('toppings');
+            let ToppingsArray = Array.from(allToppings);
+            let topppingsSelected = [];
+            let checkSelectedToppings = ToppingsArray.some(element => { if (element.checked) { topppingsSelected.push(element.id); } });
+            item.toppings = topppingsSelected;
+            if (localStorage.getItem('pizzaType') === 'reg') {
+                item.name = 'Regular Pizza';
+            }
+            if (localStorage.getItem('pizzaType') === 'sic') {
+                item.name = 'Sicilian Pizza';
+            }
+            item.price = parseFloat(document.querySelector('#price').innerHTML);
+        }
+        if (product === 'submitSub') {
+            const data = JSON.parse(document.querySelector('#submitSub').getAttribute('data'));
+            const allToppings = document.getElementsByName('subTopping');
+            let toppings = [];
+            allToppings.forEach(element => {
+                if (element.checked === true) {
+                    const l = document.querySelector(`label[for="${element.id}"]`)
+                    toppings.push(l.innerHTML);
+                }
+            });
+            item.name = data.name;
+            item.size = data.size;
+            item.toppings = toppings;
+            item.price = parseFloat(document.querySelector('#subPrice').innerHTML);
+        }
+        if (product === 'salad' || product === 'pasta') {
+            item.name = more.name;
+            item.price = more.price;
+        }
+        if (product === 'dinnerPlatters') {
+            item.name = more.name;
+            item.size = more.size;
+            item.price = more.price;
+        }
+        var cart = JSON.parse(localStorage.getItem('cart'))
+        if (cart === null) {
+            cart = [];
+        }
+        cart.push(item);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert('Item has been successfully added!');
+        closePopups();
+    }
+
+    //REMOVE ITEM FROM CART
+    function removeItemFromCart(id) {
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        for (i in cart) {
+            if (i == id) {
+                cart.splice(i, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+        }
+        getCart('contentOfCart')
+    }
+
+    //GET USER'S CART
+    function getCart(container) {
+        var totalPrice = 0;
+        document.querySelector(`#${container}`).innerHTML = '';
+        const cart = JSON.parse(localStorage.getItem('cart'));
+
+        if (cart === null || cart == '') {
+            document.querySelector('#cartError').style.display = 'inline-block';
+            document.querySelector('#cartForm').style.display = 'none';
+        }
+        else {
+            let product = document.createElement('tr');
+            if (container === 'contentOfCart') {
+                let remove = document.createElement('th');
+                remove.innerHTML = 'Remove';
+                remove.setAttribute('id', 'removeCol');
+                product.appendChild(remove);
+            }
+            let name = document.createElement('th');
+            name.innerHTML = 'Name';
+            name.setAttribute('id', 'nameCol');
+            let size = document.createElement('th');
+            size.innerHTML = 'Size';
+            size.setAttribute('id', 'sizeCol');
+            let toppings = document.createElement('th');
+            toppings.innerHTML = 'Toppings';
+            toppings.setAttribute('id', 'toppingsCol');
+            let price = document.createElement('th');
+            price.innerHTML = 'Price';
+            price.setAttribute('id', 'priceCol');
+            product.append(name);
+            product.append(size);
+            product.append(toppings);
+            product.append(price);
+            document.querySelector(`#${container}`).appendChild(product);
+            document.querySelector('#cartError').style.display = 'none';
+            document.querySelector('#cartForm').style.display = 'inline-block';
+            for (i in cart) {
+                let product = document.createElement('tr');
+                let name = document.createElement('td');
+                let size = document.createElement('td');
+                let toppings = document.createElement('td');
+                let price = document.createElement('td');
+                for (prop in cart[i]) {
+                    if (prop === 'name') {
+                        name.innerHTML = cart[i][prop];
+                    }
+                    if (prop === 'size') {
+                        size.innerHTML = cart[i][prop];
+                    }
+                    if (prop === 'toppings') {
+                        toppings.innerHTML = cart[i][prop];
+                    }
+                    if (prop === 'price') {
+                        price.innerHTML = `$${parseFloat(cart[i][prop])}`;
+                        totalPrice += parseFloat(cart[i][prop]);
+                    }
+                }
+                if (container === 'contentOfCart') {
+                    let closeCont = document.createElement('td');
+                    let close = document.createElement('button');
+                    close.setAttribute('type', 'button');
+                    close.setAttribute('onclick', `removeItemFromCart(${i});`);
+                    close.innerHTML = 'X';
+                    closeCont.appendChild(close);
+                    product.append(closeCont);
+                }
+                product.setAttribute('id', `${i}`);
+                product.appendChild(name);
+                product.appendChild(size);
+                product.appendChild(toppings);
+                product.appendChild(price);
+                document.querySelector(`#${container}`).appendChild(product);
+            }
+            document.querySelector('#cartTotal').innerHTML = totalPrice;
+            document.querySelector('#reviewTotal').innerHTML = totalPrice;
+        }
+    }
+
+    //PLACE AN ORDER
+    function placeOrder() {
+        const request = new XMLHttpRequest();
+        request.open('POST', '/placeOrder');
+        request.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        request.onload = () => {
+        }
+        const data = new FormData();
+        data.append('cart', localStorage.getItem('cart'));
+        data.append('total', parseFloat(document.querySelector('#reviewTotal').innerHTML));
+        request.send(data);
+        alert('Order has been successfully placed! Check email for details!');
+        localStorage.removeItem('cart');
+        closePopups();
+    }
+</script>
+
+{% endblock %}
+
+{% block body %}
+
+<header>
+    <div class="container-fluid">
+        <div class="row align-items-center" id="header">
+            {% if admin %}
+
+            <div class="col-10">
+                <h1>Admin</h1>
+            </div>
+            <div class="col-2">
+                <form action="logoutProcess" method="POST">{% csrf_token %}<button type="submit">Log Out</button></form>
+            </div>
+
+            {% elif authorized %}
+
+            <div class="col-8">
+                <h1>Crusty Pizza</h1>
+            </div>
+            <div class="col-2"><button onclick="openPopup('cart')">Cart</button></div>
+            <div class="col-2">
+                <form action="logoutProcess" method="POST">{% csrf_token %}<button type="submit">Log Out</button></form>
+            </div>
+
+            {% else %}
+
+            <div class="col-8">
+                <h1>Crusty Pizza</h1>
+            </div>
+            <div class="col-2"><button onclick="openPopup('registerPopup');">Register</button></div>
+            <div class="col-2"><button onclick="openPopup('loginPopup');">Log In</button></div>
+
+            {% endif %}
+
+        </div>
+    </div>
+</header>
+
+{% if admin %}
+
+<!--ADMIN-->
+
+<main id="adminMain">
+    <h2>All Orders</h2>
+    <table>
+        <tr>
+            <th id="idCol">#</th>
+            <th id="userCol">user</th>
+            <th id="orderCol">Order</th>
+            <th id="totalCol">Total</th>
+        </tr>
+        {% for i in allOrders %}
+        <tr>
+            <td class="id"><span class="bold">{{ i.id }}</span></td>
+            <td><span class="bold">{{ i.user }}</span></td>
+            <td class="orderItem" style="text-align: left;">
+                <ul>
+                    {% for i in i.order %}
+                    <p>Name: {{ i.name }}<br>{% if i.size %}Size:
+                        {{ i.size }}<br>{% endif %}{% if i.toppings %}Toppings: {% for t in i.toppings %}{{ t }}
+                        {% endfor %}<br>{% endif %}Price: ${{ i.price }}
+                    </p>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td><span class="bold">${{ i.total }}</span></td>
+        </tr>
+        {% endfor %}
+    </table>
+</main>
+
+{% elif authorized %}
+
+<!--AUTHORIZED-->
+
+<!--MAIN-->
+<main>
+    <div class="container-fluid" id="menu">
+        <!--PIZZAS HEADING-->
+        <div class="row heading">
+            <div class="col-12">
+                <h2>Pizzas</h2>
+            </div>
+        </div>
+        <!--PIZZAS-->
+        <div class="row content">
+            <div class="col-lg-6 col-s-12">
+                <div class="d-flex flex-column justify-content-center">
+                    <h3>Regular Pizza</h3>
+                    <table>
+                        <tr>
+                            <th>Toppings</th>
+                            <th>S</th>
+                            <th>L</th>
+                        </tr>
+                        {% for i in RegularPizza %}
+                        <tr>
+                            <td>{{ i.num_of_toppings }}</td>
+                            <td>${{ i.small_price }}</td>
+                            <td>${{ i.large_price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <button class="blockButton" onclick="openPopup('regAddToppings')">Select</button>
+                </div>
+            </div>
+            <div class="col-lg-6 col-s-12">
+                <div class="d-flex flex-column justify-content-center">
+                    <h3>Sicilian Pizza</h3>
+                    <table>
+                        <tr>
+                            <th>Toppings</th>
+                            <th>S</th>
+                            <th>L</th>
+                        </tr>
+                        {% for i in SicilianPizza %}
+                        <tr>
+                            <td>{{ i.num_of_toppings }}</td>
+                            <td>${{ i.small_price }}</td>
+                            <td>${{ i.large_price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <button class="blockButton" onclick="openPopup('sicAddToppings')">Select</button>
+                </div>
+            </div>
+        </div>
+        <!--MORE HEADING-->
+        <div class="row heading">
+            <div class="col-12">
+                <h2>More</h2>
+            </div>
+        </div>
+        <!--SUBS & PASTA & SALADS & DINNER PLATTERS-->
+        <div class="row content">
+            <div class="col-lg-6 col-s-12">
+                <div class="d-flex flex-column justify-content-center">
+                    <h3>Subs</h3>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>S</th>
+                            <th>L</th>
+                            <th>Select</th>
+                        </tr>
+                        {% for i in Subs %}
+                        <tr>
+                            <td>{{ i.name }}</td>
+                            <td>{% if i.small_price %} ${{ i.small_price }} {% else %} - {% endif %}</td>
+                            <td>{% if i.large_price %} ${{ i.large_price }} {% else %} - {% endif %}</td>
+                            <td><button {% if i.small_price %}
+                                    onclick="let more = { name: `{{ i.name }}`, size: 'S', price: {{ i.small_price }}, toppings: [ {% for p in i.available_toppings.all %} '{{ p }}', {% endfor %} 'Extra Cheese'] }; openPopup('subPopup', more);"
+                                    {% endif %}>S</button>
+                                <button {% if i.large_price %}
+                                    onclick="let more = { name: `{{ i.name }}`, size: 'S', price: {{ i.large_price }}, toppings: [ {% for p in i.available_toppings.all %} '{{ p }}', {% endfor %} 'Extra Cheese'] }; openPopup('subPopup', more);"
+                                    {% endif %}>L</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h3>Pasta</h3>
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Select</th>
+                                    </tr>
+                                    {% for i in Pasta %}
+                                    <tr>
+                                        <td>{{ i.name }}</td>
+                                        <td>{{ i.price }}</td>
+                                        <td><button
+                                                onclick="let more = {name: `{{ i.name }}`, price: {{ i.price }} }; addItemToCart('pasta', more)">Add</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h3>Salads</h3>
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Select</th>
+                                    </tr>
+                                    {% for i in Salads %}
+                                    <tr>
+                                        <td>{{ i.name }}</td>
+                                        <td>{{ i.price }}</td>
+                                        <td><button
+                                                onclick="let more = {name: `{{ i.name }}`, price: {{ i.price }} }; addItemToCart('salad', more)">Add</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h3>Dinner Platters</h3>
+                                <table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>S</th>
+                                        <th>L</th>
+                                        <th>Select</th>
+                                    </tr>
+                                    {% for i in DinnerPlatters %}
+                                    <tr>
+                                        <td>{{ i.name }}</td>
+                                        <td>{{ i.small_price }}</td>
+                                        <td>{{ i.large_price }}</td>
+                                        <td> <button
+                                                onclick="let more = {name: `{{ i.name }}`, size: 'S', price: {{ i.small_price }} }; addItemToCart('dinnerPlatters', more)">S</button>
+                                            <button
+                                                onclick="let more = {name: `{{ i.name }}`, size: 'L', price: {{ i.large_price }} }; addItemToCart('dinnerPlatters', more)">L</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!--POP-UPS-->
+<div class="popup" id="addToppings" style="display: none;"
+    data-prices-reg="{{ RegularPizza.0.small_price }}, {{ RegularPizza.0.large_price }}, {{ RegularPizza.1.small_price }}, {{ RegularPizza.1.large_price }}, {{ RegularPizza.2.small_price }}, {{ RegularPizza.2.large_price }}, {{ RegularPizza.3.small_price }}, {{ RegularPizza.3.large_price }}, {{ RegularPizza.4.small_price }}, {{ RegularPizza.4.large_price }}"
+    data-prices-sic="{{ SicilianPizza.0.small_price }}, {{ SicilianPizza.0.large_price }}, {{ SicilianPizza.1.small_price }}, {{ SicilianPizza.1.large_price }}, {{ SicilianPizza.2.small_price }}, {{ SicilianPizza.2.large_price }}, {{ SicilianPizza.3.small_price }}, {{ SicilianPizza.3.large_price }}, {{ SicilianPizza.4.small_price }}, {{ SicilianPizza.4.large_price }}">
+    <button onclick="closePopups()" class="closeForm">X</button>
+    <h2>Add Toppings</h2>
+    <form id="submitPizza" onchange="calculatePriceOfPizza()" onsubmit="addItemToCart('submitPizza'); return false;">
+        <p>Price: $<span id="price"></span></p>
+        <p class="bold">Size</p>
+        <input type="radio" class="size" id="PizzaSmall" name="size" required>
+        <label for="pizzaSmall">Small</label>
+        <input type="radio" class="size" id="PizzaLarge" name="size" required>
+        <label for="PizzaLarge">Large</label>
+        <p class="bold">Toppings</p>
+        {% for topping in Toppings %}
+        <input type="checkbox" class="topping" id="{{ topping }}" name="toppings" disabled>
+        <label class="toppingName" for="{{ topping }}">{{ topping }}</label>
+        {% endfor %}
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+<div class="popup" id="subPopup" style="display: none;">
+    <button onclick="closePopups()" class="closeForm">X</button>
+    <h2>Add Toppings</h2>
+    <p>Price: $<span id="subPrice"></span></p>
+    <form id="submitSub" onchange="calculatePriceOfSub();" onsubmit="addItemToCart('submitSub'); return false;">
+    </form>
+    <p class="note"><span class="bold">*</span> $0.5 per topping</p>
+</div>
+
+<div class="popup" id="cart" style="display: none;">
+    <button onclick="closePopups()" class="closeForm">X</button>
+    <h3>{{ user }}'s Cart</h3>
+    <form id="cartForm" onsubmit="openPopup('review'); return false;" style="display: none;">
+        <table id="contentOfCart">
+        </table>
+        <p>Total: $<span id="cartTotal"></span></p>
+        <button type="submit">Continue</button>
+    </form>
+    <p id="cartError">Nothing here yet :(</p>
+</div>
+
+<div class="popup" id="review" style="display: none;">
+    <button onclick="closePopups()" class="closeForm">X</button>
+    <h3>Confirm your order</h3>
+    <form onsubmit="placeOrder(); return false;">
+        <table id="reviewContent">
+        </table>
+        <p>Total: $<span id="reviewTotal"></span></p>
+        <button type="button" onclick="openPopup('cart')">Back</button>
+        <button type="submit">Order</button>
+    </form>
+</div>
+
+{% else %}
+
+<!--UNAUTHORIZED-->
+
+<!--MAIN-->
+<main>
+    <div class="container-fluid" id="mainUnauthorized">
+        <div class="row">
+            <div class="col-12" id="description">
+                <p>TRY OUT THE CRUSTIEST PIZZA IN YOUR LIFE!</p>
+            </div>
+        </div>
+        <div class="row" id="getInButtons">
+            <div class="col-6"><button onclick="openPopup('registerPopup');">Let's get started!</button></div>
+            <div class="col-6"><button onclick="openPopup('loginPopup');">I am already registered!</button></div>
+        </div>
+    </div>
+</main>
+
+<!--POP-UPS-->
+
+<!--REGISTER POPUP-->
+<div class="popup" id="registerPopup" style="display: none;">
+    <button onclick="closePopups()" class="closeForm">X</button>
+    <h2 id="formTitle">Register</h2>
+    <form action="registerProcess" method="POST">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" maxlength="32" required>
+        <label for="firstName">First Name</label>
+        <input type="text" name="firstName" id="firstName" required>
+        <label for="lastName">Last Name</label>
+        <input type="text" name="lastName" id="lastName" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+<!--LOGIN POPUP-->
+<div class="popup" id="loginPopup" style="display:none;">
+    <button onclick="closePopups();" class="closeForm">X</button>
+    <h2>Log In</h2>
+    <form action="loginProcess" method="POST">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <button type="submit">Log In</button>
+    </form>
+</div>
+
+{% endif %}
+
+{% endblock %}
