@@ -1,0 +1,38 @@
+h2,
+h3 {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+select,
+input[type=date] {
+    background-color: rgb(255, 255, 255);
+}
+
+#history-table th,
+#history-table td {
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+#history-table td:nth-child(1) {
+    font-weight: 900;
+}
+
+#history-table td:nth-child(5) {
+    font-weight: 200;
+}
+
+#to-top {
+    position: fixed;
+    outline: none;
+    font-size: 1.5rem;
+    bottom: 4%;
+    right: 4%;
+    color: rgb(0, 0, 0);
+    background: rgb(255, 255, 255);
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid rgb(0, 0, 0);
+}
