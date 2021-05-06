@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+Search
+
+{% endblock %}
+
+
+{% block buttons %}
+
+<a href="{{ url_for('home') }}">Back</a><a href="{{ url_for('logout') }}">Log Out</a>
+
+{%endblock%}
+
+
+{%block main%}
+<div id="results">
+    <table>
+        <th>TITLE</th>
+        <th>AUTHOR</th>
+        <th>MORE</th>
+
+        {%for book in result%}
+
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td><a href="book_page/{{ book.isbn }}">Open</a></td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+</div>
+{%endblock%}

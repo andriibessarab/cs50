@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+Log In
+
+{% endblock %}
+
+
+{% block buttons %}
+
+<a href="{{ url_for('home') }}">Back</a><a href="{{ url_for('register') }}">Register</a>
+
+{%endblock%}
+
+
+{%block main%}
+
+<div class="container-fluid">
+    <div class="row justify-content-md-center">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form action="login_process" method="post" class="register-login-forms">
+                <br>
+                <label for="username">
+                    <h3>Username:</h3>
+                </label>
+                <br>
+                <input type="text" name="username" id="username" pattern="^[a-zA-Z0-9_.]+$" required
+                    oninvalid="setCustomValidity('No special characters')"
+                    onchange="try{setCustomValidity('')}catch(e){}">
+                <br>
+                <label for="password">
+                    <h3>Password:</h3>
+                </label>
+                <br>
+                <input type="password" name="password" id="password" pattern="^[a-zA-Z0-9_.]+$" required
+                    oninvalid="setCustomValidity('No special characters')"
+                    onchange="try{setCustomValidity('')}catch(e){}">
+                <br>
+                <button>Log In</button>
+                <p>Don't have an account yet? <a href="{{ url_for('register') }}" class="bold">Register</a></p>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+{%endblock%}
