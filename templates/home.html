@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+Home
+
+{% endblock %}
+
+
+{% block buttons %}
+
+{% if authorized %}
+
+<a href="{{ url_for('logout') }}">Log Out</a>
+
+{% else %}
+
+<a href="{{ url_for('login') }}">Log In</a><a href="{{ url_for('register') }}">Register</a>
+
+{% endif %}
+
+{%endblock%}
+
+
+{%block main%}
+
+{% if authorized %}
+
+<div class="centered" id="hello">
+    <h2>Hello,<br><span>{{ username }}! </span></h2>
+    <form action="search" method="POST" id="search">
+        <input type="text" name="search" placeholder="Search" required>
+        <button>Search</button>
+    </form>
+    <p class="tip"><span class="bold">API LINK: </span>/api/isbn of a book</p>
+</div>
+
+{% else %}
+
+<h3 class="centered" id="description">ARE YOU LOOKING FOR A GOOD BOOK?<br> YOU ARE IN A RIGHT PLACE!<br>
+    <a href="{{ url_for('register') }}" id="get-started">GET STARTED</a></h3>
+
+
+{% endif %}
+
+{% endblock %}

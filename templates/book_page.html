@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+{{ book.title }}|Book Page
+
+{% endblock %}
+
+
+{% block buttons %}
+
+<a href="{{ url_for('home') }}">Back</a>
+
+{%endblock%}
+
+
+{%block main%}
+
+<div id="book-info">
+    <h1>{{ book.title }}</h1>
+    <h2>{{ book.author }}</h2>
+    <h3>{{ book.year }}</h3>
+    <h4><span class="bold">ISBN: </span>{{ book.isbn }}</h4>
+    <h3 class="rating">GoodBook Rating: {{ goodbook_rating }}<br><span>out of {{ goodbook_work_ratings_count }} reviews</span></h3><h3 class="rating">GoodReads Rating: {{ goodreads_rating }}<br><span>out of {{ goodreads_work_ratings_count }} reviews</span></h3>
+</div>
+
+<div id="reviews">
+    <h2>Reviews</h2>
+    <div id="add-review">
+        <h3>Leave a review</h3>
+
+        {% if add_review %}
+
+        <form action="{{book.isbn}}/add_review" method="POST">
+            <input type="radio" value=1 name="rating" id="1-star" required>
+            <label for="1-star">very bad</label>
+            <input type="radio" value=2 name="rating" id="2-star" required>
+            <label for="2-star">bad</label>
+            <input type="radio" value=3 name="rating" id="3-star" required>
+            <label for="3-star">so-so</label>
+            <input type="radio" value=4 name="rating" id="4-star" required>
+            <label for="4-star">good</label>
+            <input type="radio" value=5 name="rating" id="5-star" required>
+            <label for="5-star">exciting</label>
+            <textarea name="review" maxlength="100" rows="5" cols="30" required></textarea>
+            <button>Submit</button>
+        </form>
+
+        {%else%}
+
+        <p>You've already submitted a review. Thank you!</p>
+
+        {%endif%}
+
+    </div>
+    <div id="all-reviews">
+
+        <h3>All reviews</h3>
+        {% if reviews %}
+
+        <ul>
+
+            {% for review in reviews %}
+
+            <li><span class="bold">({{ review.rating }} stars)</span><br>{{ review.review }}<br><span class="bold">by
+                    {{ review.username }}</span></li>
+
+            {%endfor%}
+
+        </ul>
+
+        {% else %}
+
+        <p>No reviews yet</p>
+
+        {% endif %}
+
+    </div>
+
+
+    {%endblock%}
+</div>

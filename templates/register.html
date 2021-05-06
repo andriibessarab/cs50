@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+
+Register
+
+{% endblock %}
+
+
+{% block buttons %}
+
+<a href="{{ url_for('home') }}">Back</a><a href="{{ url_for('login') }}">Log In</a>
+
+{%endblock%}
+
+
+{%block main%}
+
+<div class="container-fluid">
+    <div class="row justify-content-md-center">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form action="register_process" method="post" class="register-login-forms">
+                <label for="username">
+                    <h3>Username:</h3>
+                </label>
+                <br>
+                <input type="text" name="username" id="username" minlength="3" maxlength="15" pattern="^[a-zA-Z0-9_.]+$"
+                    required oninvalid="setCustomValidity('Please match the requirements below')"
+                    onchange="try{setCustomValidity('')}catch(e){}">
+                <br>
+                <label for="password">
+                    <h3>Password:</h3>
+                </label>
+                <br>
+                <input type="password" name="password" id="password" minlength="8" maxlength="15"
+                    pattern="^[a-zA-Z0-9_.]+$" required
+                    oninvalid="setCustomValidity('Please match the requirements below')"
+                    onchange="try{setCustomValidity('')}catch(e){}">
+                <br>
+                <button>Register</button>
+                <br>
+                <p>Already registered? <a href="{{ url_for('login') }}" class="bold">Log In</a></p>
+                <br>
+                <p><span class="bold">REQUIREMENTS: </span>
+                    Your username and pasword cannot contain any special characters, except
+                    underscore(_) and dot(.).
+                    Your username needs to be made up of at least 3 characters, while password must include at least 8
+                    characters. And the limit for both username and password is 15 symbols.</p>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+{%endblock%}
